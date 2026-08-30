@@ -239,3 +239,16 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- FlashView (backend) ---
+backend/data/
+data/
+
+# --- FlashView (frontend) ---
+frontend/node_modules/
+frontend/dist/
+npm-debug.log*
+pnpm-lock.yaml
+
+# Editor swap files
+*.swp

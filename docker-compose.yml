@@ -1,0 +1,24 @@
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      - MEDIA_DIR=/media/movies
+      - DATA_DIR=/data
+    volumes:
+      # Point this at your USB drive that holds the movies
+      - /media/usb/movies:/media/movies:ro
+      - vod-data:/data
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+volumes:
+  vod-data:

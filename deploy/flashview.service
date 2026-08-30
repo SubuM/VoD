@@ -1,0 +1,23 @@
+[Unit]
+Description=FlashView streaming server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/flashview/backend
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-/home/pi/flashview/backend/.env
+ExecStart=/home/pi/flashview/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 2
+Restart=on-failure
+RestartSec=3
+
+# Harden the service
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target
