@@ -4,7 +4,7 @@ set -euo pipefail
 # FlashView installer for Raspberry Pi 4 (Raspberry Pi OS 64-bit, Bookworm)
 # Usage: bash setup_pi.sh  (run from the repo root on the Pi)
 
-APP_DIR="${APP_DIR:-/home/pi/flashview}"
+APP_DIR="${APP_DIR:-/home/sma/flashview}"
 MEDIA_DIR="${MEDIA_DIR:-/media/usb/movies}"
 PORT="${PORT:-8000}"
 
@@ -44,7 +44,7 @@ echo "   (2) Find its device with: lsblk"
 echo "   (3) Mount and enable auto-mount, for example:"
 echo "       sudo mkdir -p $MEDIA_DIR"
 echo "       UUID=\$(sudo blkid -s UUID -o value /dev/sda1)"
-echo "       echo \"UUID=\$UUID $MEDIA_DIR vfat defaults,noatime,uid=pi,gid=pi 0 0\" | sudo tee -a /etc/fstab"
+echo "       echo \"UUID=\$UUID $MEDIA_DIR vfat defaults,noatime,uid=sma,gid=sma 0 0\" | sudo tee -a /etc/fstab"
 
 echo "==> Installing systemd service"
 sudo cp "$APP_DIR/deploy/flashview.service" /etc/systemd/system/flashview.service
