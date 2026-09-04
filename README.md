@@ -29,14 +29,14 @@ A small, self-hosted, **completely free** media server that mimics the core Plex
 ## Run on the Pi (recommended)
 
 ```bash
-sudo apt-get update
-sudo apt-get install -y ffmpeg python3-venv git
 git clone <your-repo-url> flashview
 cd flashview
 bash deploy/setup_pi.sh
 ```
 
-The script installs dependencies, builds the frontend, writes `backend/.env`
+The script detects what is missing and installs everything itself: system packages
+(`ffmpeg`, Python venv, `git`, `curl`) and Node.js ≥ 18 if absent. It then creates a
+virtualenv with all Python dependencies, builds the frontend, writes `backend/.env`
 (points `MEDIA_DIR` at `/media/usb/movies`), and registers a `flashview`
 systemd service. Then mount your USB drive onto `$MEDIA_DIR`, add movie files,
 and open `http://<raspberry-pi-ip>:8000`.

@@ -8,9 +8,27 @@ APP_DIR="${APP_DIR:-/home/sma/flashview}"
 MEDIA_DIR="${MEDIA_DIR:-/media/usb/movies}"
 PORT="${PORT:-8000}"
 
-echo "==> Installing system packages (ffmpeg, python venv)"
-sudo apt-get update
-sudo apt-get install -y ffmpeg python3-venv ca-certificates curl
+echo "==> Checking required system components"
+REQUIRED_APT=(ffmpeg python3-venv python3-pip git ca-certificates curl)
+MISSING_APT=()
+for pkg in "${REQUIRED_APT[@]}"; do
+  if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+    MISSING_APT+=("$pkg")
+  fi
+done
+
+if [ ${#MISSING_APT[@]} -gt 0 ]; then
+  echo "==> Installing missing system packages: ${MISSING_APT[*]}"
+  sudo apt-get update
+  sudo apt-get install -y "${MISSING_APT[@]}"
+fi
+
+NODE_MAJOR="$(node --version 2>/dev/null | sed 's/^v//' | cut -d. -f1 || true)"
+if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1 || [ "${NODE_MAJOR:-0}" -lt 18 ]; then
+  echo "==> Installing Node.js 20.x (needed to build the frontend, Node >= 18 required)"
+  curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+  sudo apt-get install -y nodejs
+fi
 
 echo "==> Creating venv and installing Python dependencies from requirements.txt"
 python3 -m venv "$APP_DIR/.venv"
@@ -19,13 +37,8 @@ python3 -m venv "$APP_DIR/.venv"
 
 echo "==> Building frontend"
 cd "$APP_DIR/frontend"
-if command -v node >/dev/null 2>&1 && command -v npm >/dev/null 2>&1; then
-  npm ci && npm run build
-else
-  echo "!! node/npm not found — building the frontend requires Node >= 18."
-  echo "   Install it with:  curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt-get install -y nodejs"
-  exit 1
-fi
+npm ci
+npm run build
 
 echo "==> Writing configuration"
 mkdir -p "$APP_DIR/backend/data"
