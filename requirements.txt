@@ -1,0 +1,6 @@
+# All Python dependencies for FlashView — install into a virtualenv:
+#   python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+#
+# The frontend is plain static files; its packages live in frontend/package.json
+# and are installed locally with `npm ci` (never system-wide).
+-r backend/requirements.txt

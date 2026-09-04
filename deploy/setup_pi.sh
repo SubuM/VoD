@@ -10,12 +10,12 @@ PORT="${PORT:-8000}"
 
 echo "==> Installing system packages (ffmpeg, python venv)"
 sudo apt-get update
-sudo apt-get install -y ffmpeg python3-venv python3-pip ca-certificates curl
+sudo apt-get install -y ffmpeg python3-venv ca-certificates curl
 
-echo "==> Building/installing backend"
+echo "==> Creating venv and installing Python dependencies from requirements.txt"
 python3 -m venv "$APP_DIR/.venv"
 "$APP_DIR/.venv/bin/pip" install --upgrade pip
-"$APP_DIR/.venv/bin/pip" install -r "$APP_DIR/backend/requirements.txt"
+"$APP_DIR/.venv/bin/pip" install -r "$APP_DIR/requirements.txt"
 
 echo "==> Building frontend"
 cd "$APP_DIR/frontend"

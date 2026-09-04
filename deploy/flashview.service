@@ -10,7 +10,7 @@ Group=pi
 WorkingDirectory=/home/pi/flashview/backend
 Environment=PYTHONUNBUFFERED=1
 EnvironmentFile=-/home/pi/flashview/backend/.env
-ExecStart=/home/pi/flashview/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 2
+ExecStart=/home/pi/flashview/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 1
 Restart=on-failure
 RestartSec=3
 
@@ -18,6 +18,10 @@ RestartSec=3
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=full
+
+# Keep background scanning from starving streaming on the Pi's slow CPU
+Nice=10
+IOSchedulingClass=idle
 
 [Install]
 WantedBy=multi-user.target

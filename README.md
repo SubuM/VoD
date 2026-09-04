@@ -63,7 +63,7 @@ Edit the media volume mount in `docker-compose.yml` to match your USB drive.
 ```bash
 # 1. Backend
 python3 -m venv .venv
-.venv/bin/pip install -r backend/requirements.txt
+.venv/bin/pip install -r requirements.txt
 cp backend/.env.example backend/.env        # set MEDIA_DIR to a folder of movies
 bash backend/run.sh                          # http://127.0.0.1:8000
 
